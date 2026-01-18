@@ -1,5 +1,5 @@
 const appConfig = {
-    title: "My Network Controller",
+    title: "t1",
     menus: [
         {
             name: "Home (Login)",

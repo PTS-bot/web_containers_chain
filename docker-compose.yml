@@ -2,70 +2,21 @@ services:
   opendaylight:
     build:
       context: ./
-      dockerfile: dockerfile.odl
-    # image: opendaylight/odl:latest
-    # image: opendaylight/odl-ubuntu-image
-    # image: taothong/odl-ubuntu-f:1.0
+      dockerfile: dockerfile.jupyter
     container_name: odl_controller
     ports:
-      - "8181:8181"
-      - "6633:6633"
-      - "6653:6653"
-      - "8101:8101"
-      - "8888:8888"      
+      - "8888:8888"          
 
-      - "8090:8080"      
-    environment:
-      - JAVA_OPTS=-Xms2g -Xmx4g
-    # เพิ่ม 2 บรรทัดนี้เพื่อแก้ปัญหา locale
-      - LANG=C.UTF-8
-      - LC_ALL=C.UTF-8      
+
+  gateway:
+    build: 
+      context: .
+      dockerfile: dockerfile.gateway  
+    container_name: odl-gateway
     volumes:
-      - ./hawtio/hawtio-karaf-2.17.0-features.xml:/home/user/karaf-0.18.1/hawtio-karaf-2.17.0-features.xml    
-      - ./hawtio/hawtio-osgi-2.17.0.war:/home/user/karaf-0.18.1/deploy/hawtio-osgi-2.17.0.war
-
       - ./web_porxy_nginx:/var/www/dashboard    
-      - ./web_porxy_nginx/menu_config.js:/var/www/dashboard/menu_config.js
-
-      - ./setup_odl.sh:/usr/local/bin/setup_odl.sh
-      - ./unlock_hawtio.sh:/usr/local/bin/unlock_hawtio.sh
-
-      # http://localhost:8181/hawtio
-
-      # - /usr/local/bin/setup_odl.sh
-      # - /usr/local/bin/unlock_hawtio.sh
-
-
-
-
-
-    #   - ./entrypoint.sh:/entrypoint.sh    
-    #   - ./users.properties:/etc/users.properties
-    privileged: true  # <--- บรรทัดนี้สำคัญที่สุด! สำคัญกว่า cap_add
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-      - net.ipv4.ip_forward=1        
-    restart: unless-stopped
-    stdin_open: true
-    tty: true
-
-
-    # ONOS Controller
-    # docker run -d -p 8181:8181 -p 8101:8101 -p 6653:6653 -p 6633:6633 --name onos onosproject/onos
-
-  # gateway:
-  #   build: 
-  #     context: .
-  #     dockerfile: dockerfile.gateway  # <-- ชี้ไปที่ไฟล์ใหม่ที่เราสร้าง
-  #   container_name: odl-gateway
-  #   volumes:
-  #     - ./web_porxy_nginx:/var/www/dashboard    
-  #   ports:
-  #     - "8080:8080"      
-  #   # network_mode: "host"        
+    ports:
+      - "8080:8080"      
 
   
 

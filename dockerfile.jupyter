@@ -1,25 +1,24 @@
-# Dockerfile.gateway
 FROM ubuntu:22.04
 
-# ป้องกันการถามคำถามตอนติดตั้ง package
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 1. Copy Script ติดตั้งเข้าไปก่อน (ยังไม่ Copy Config)
-COPY install_nginx.sh /install_nginx.sh
+# --- 🟢 กำหนดตัวแปรที่นี่ (เปลี่ยนค่าได้ตามใจชอบ) ---
+# ENV JUPYTER_TOKEN="mysecretpassword"
+# ENV JUPYTER_WORKDIR="/home/myproject"
 
-# 2. รัน Script ติดตั้ง Nginx ให้เสร็จก่อน!
-# ตอนนี้มันจะลง Config เดิมๆ ของโรงงานไปก่อน ซึ่งจะไม่ Error
-RUN chmod +x /install_nginx.sh && \
-    /install_nginx.sh
+# สร้างโฟลเดอร์สำหรับทำงาน (ตามตัวแปรที่ตั้งไว้)
+# WORKDIR ${JUPYTER_WORKDIR}
 
-# 3. Copy ไฟล์ Dashboard เข้าไป
-COPY web_porxy_nginx /var/www/dashboard
+# Copy ไฟล์
+COPY requirements_python.txt .
+COPY requirements_java.txt .
+COPY install_jupyter.sh /usr/local/bin/install_jupyter.sh
 
-# 4. *** Copy Config ของเราไป "ทับ" ของโรงงานในขั้นตอนนี้ ***
-# (ย้ายมาไว้หลังสุด)
-COPY web_porxy_nginx/nginx.conf /etc/nginx/nginx.conf
+# รัน Script (Script จะดึงค่า ENV ข้างบนไปใช้เอง)
+RUN chmod +x /usr/local/bin/install_jupyter.sh && \
+    /usr/local/bin/install_jupyter.sh
 
-# สั่งรัน Nginx
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 8888
 
-EXPOSE 8080
+# ใช้ Config ที่ Script สร้างไว้
+CMD ["jupyter", "lab", "--allow-root", "--config=/root/.jupyter/jupyter_lab_config.py"]
