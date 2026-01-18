@@ -1,9 +1,9 @@
 services:
-  opendaylight:
+  jupyter:
     build:
       context: ./
       dockerfile: dockerfile.jupyter
-    container_name: odl_controller
+    container_name: jupyter
     ports:
       - "8888:8888"          
 
@@ -12,11 +12,46 @@ services:
     build: 
       context: .
       dockerfile: dockerfile.gateway  
-    container_name: odl-gateway
+    container_name: web-gateway
     volumes:
       - ./web_porxy_nginx:/var/www/dashboard    
     ports:
       - "8080:8080"      
 
-  
+  pipelines:
+      ports:
+          - 9099:9099
+      extra_hosts:
+          - host.docker.internal:host-gateway
+      # volumes:
+      #     - pipelines:/app/pipelines
+      container_name: pipelines
+      restart: always
+      image: ghcr.io/open-webui/pipelines:main
 
+  open-webui:
+      container_name: open-webui
+      restart: always
+      image: ghcr.io/open-webui/open-webui:main
+      ports:
+          - 8877:8080
+      # volumes:
+      #     - open-webui:/app/backend/data  # 
+      environment:
+          - OLLAMA_BASE_URL=http://ollama:11434      
+          # - WEBUI_URL=http://localhost:8080/open-webui  
+
+
+volumes:
+    open-webui:
+        external: true
+        name: open-webui
+    pipelines:
+        external: true
+        name: pipelines     
+    # ollama:
+    #     external: true
+    #     name: ollama
+
+# docker volume create --name=pipelines
+# docker volume create --name=open-webui

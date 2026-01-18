@@ -49,7 +49,6 @@ mkdir -p /root/.jupyter
 CONFIG_FILE="/root/.jupyter/jupyter_lab_config.py"
 mkdir -p "$WORK_DIR"
 
-echo "c.ServerApp.base_url = '/jupyter'" >> "$CONFIG_FILE"
 echo "Generating Jupyter Config at $CONFIG_FILE..."
 
 cat <<EOT > "$CONFIG_FILE"
@@ -65,4 +64,15 @@ c.ServerApp.token = '$JUP_TOKEN'
 c.ServerApp.root_dir = '$WORK_DIR'
 EOT
 
+
+echo "c.ServerApp.base_url = '/jupyter'" >> "$CONFIG_FILE"
+echo "c.ServerApp.allow_origin = '*'" >> $CONFIG_FILE
+
+echo "c.ServerApp.allow_remote_access = True" >> $CONFIG_FILE
+
+echo "c.ServerApp.tornado_settings = {'headers': {'Content-Security-Policy': \"frame-ancestors 'self' *\"}}" >> $CONFIG_FILE
+
+# ปิด XSRF check เพื่อให้ iframe ทำงานได้ลื่นขึ้น
+
+echo "c.ServerApp.disable_check_xsrf = True" >> $CONFIG_FILE
 echo "=== Installation Complete ==="

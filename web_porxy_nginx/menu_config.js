@@ -1,41 +1,26 @@
 const appConfig = {
-    title: "t1",
+    title: "",
     menus: [
         {
-            name: "Home (Login)",
+            name: "Home",
             url: "home.html", 
             active: true
         },
         {
-            name: "Hawtio (ODL)",
-            url: "/hawtio/",
-            // url: "/proxy/8181/hawtio/",
+            name: "Jupyter",
+            url: "/jupyter/",
+            // url: "http://jupyter:8888/jupyter/lab",
+            // url: "http://localhost:8888/jupyter/lab",
             active: false
         },
         {
-            name: "API (ODL)",
-            url: "http://localhost:8181/rests/data/ietf-yang-library:modules-state",
+            name: "AI(LLM)",
+            url: "http://localhost:8877",
             active: false
         },
         {
-            name: "Jupyter Lab",
-            // url: "/proxy/8888/lab",
-            // url: "http://localhost:8888",
+            name: "Pad.ws",
             url: "/jupyter/lab",
-
-            active: false
-        },
-        {
-            // (อนาคต) Web App ใหม่ อยู่ Port 9000
-            name: "Simulated Web",
-            // url: "http://localhost:8080",    
-            url: "https://reg.rbru.ac.th/registrar2/login.asp", 
-
-            // url: "https://www.google.com",
-            // url: "http://localhost:8181/hawtio/",
-            // url: "http://localhost:8181/hawtio/auth/login.html",
-            // url: "http://localhost:8181/rests/data/ietf-yang-library:modules-state",
-            // url: "http://host.docker.internal:8181/hawtio", 
             active: false
         }
     ]
