@@ -22,13 +22,9 @@ const appConfig = {
             // url: "/proxy/8888/lab",
             // url: "http://localhost:8888",
             url: "/jupyter/lab",
+
             active: false
         },
-        {
-            name: "open-webui",
-            url: "http://localhost:8099/auth?redirect=%2F",
-            active: false
-        },        
         {
             // (อนาคต) Web App ใหม่ อยู่ Port 9000
             name: "Simulated Web",

@@ -28,7 +28,7 @@ CONFIG_FILE="/root/.jupyter/jupyter_lab_config.py"
 
 echo "=== [Config] Generating Jupyter Config ==="
 
-# บรรทัดแรกใช้ > เพื่อสร้างไฟล์ใหม่    
+# บรรทัดแรกใช้ > เพื่อสร้างไฟล์ใหม่
 echo "c.ServerApp.ip = '0.0.0.0'" > $CONFIG_FILE
 
 # บรรทัดต่อไปใช้ >> เพื่อต่อท้าย
