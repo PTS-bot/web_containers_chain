@@ -6,7 +6,8 @@ services:
     container_name: jupyter
     ports:
       - "8888:8888"          
-
+    volumes:
+      - ./work_space:/home/master
 
   gateway:
     build: 
@@ -41,6 +42,53 @@ services:
           - OLLAMA_BASE_URL=http://ollama:11434      
           # - WEBUI_URL=http://localhost:8080/open-webui  
 
+  White_board:
+    image: lovasoa/wbo:latest
+    container_name: White_board
+    ports:
+      - "5001:80" # เข้าผ่าน http://localhost:5001
+    volumes:
+      - ./work_space/web_white_board:/opt/app/server-data # เซฟข้อมูลกระดานไว้
+    restart: unless-stopped
+
+  obsidian:
+    image: lscr.io/linuxserver/obsidian:latest
+    container_name: obsidian
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Bangkok
+    volumes:
+      - ./work_space/web_obsidian-config:/config  # เก็บไฟล์ Vault และ Config ไว้ที่นี่
+    ports:
+      - 3000:3000  # เข้าผ่าน http://localhost:3000
+      - 3001:3001  # HTTPS
+    # สองบรรทัดล่างนี้ สำคัญมากสำหรับ Obsidian (เพราะมันเป็น Electron App)
+    security_opt:
+      - seccomp:unconfined 
+    shm_size: "1gb"
+    restart: unless-stopped
+
+  webtop:
+    image: lscr.io/linuxserver/webtop:ubuntu-xfce
+    container_name: webtop
+    security_opt:
+      - seccomp:unconfined # จำเป็นเพื่อให้บางโปรแกรมทำงานได้สมบูรณ์
+    environment:
+      - PUID=1000 # User ID
+      - PGID=1000 # Group ID
+      - TZ=Asia/Bangkok # ตั้งเวลาเป็นไทย
+      - SUBFOLDER=/ # (Optional) ถ้าใช้ Reverse Proxy
+      # - KEYBOARD=en-us-qwerty # (Optional) ตั้งค่าคีย์บอร์ด
+    volumes:
+      - ./work_space/web_desktop:/config # เก็บข้อมูล Home Directory ไว้ที่นี่เพื่อไม่ให้ข้อมูลหาย
+      # - /var/run/docker.sock:/var/run/docker.sock # (Optional) เปิดบรรทัดนี้ถ้าอยากรัน Docker ซ้อนข้างใน
+    ports:
+      - 3100:3000 # พอร์ตสำหรับเข้าผ่าน HTTP
+      - 3101:3001 # พอร์ตสำหรับเข้าผ่าน HTTPS
+    shm_size: "1gb" # สำคัญมาก! ต้องตั้งค่านี้ไม่งั้น Browser ใน Webtop จะแครชบ่อย
+    restart: unless-stopped
+ 
 
 volumes:
     open-webui:

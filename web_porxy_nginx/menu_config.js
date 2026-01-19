@@ -19,9 +19,20 @@ const appConfig = {
             active: false
         },
         {
-            name: "Pad.ws",
-            url: "/jupyter/lab",
+            name: "White_board",
+            // url: "/wbo",
+            url: "http://localhost:5001",
             active: false
-        }
+        },
+        {
+            name: "obsidian",
+            url: "http://localhost:3000",
+            active: false
+        },
+        {
+            name: "Desktop",
+            url: "http://localhost:3100",
+            active: false
+        }        
     ]
 };
