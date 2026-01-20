@@ -1,119 +1,212 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Containers Chain</title>
+    <title>Container Hub</title>
     <style>
-        /* รีเซ็ตค่าพื้นฐาน */
-        body, html {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #000; /* พื้นหลังสีดำ */
-            overflow: hidden; /* ซ่อน Scrollbar */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* ใช้ฟอนต์เดิมเพื่อให้รู้สึกต่อเนื่อง */
-        }
-
-        /* คอนเทนเนอร์หลักสำหรับจัดกึ่งกลาง */
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            position: relative;
-            z-index: 10; /* ให้ข้อความอยู่เหนือดาว */
-        }
-
-        /* สไตล์ข้อความตรงกลาง */
-        h1.main-title {
-            color: #ffffff;
-            font-size: 4em; /* ขนาดตัวอักษรใหญ่ */
-            font-weight: 300; /* ตัวบางดูทันสมัย */
-            text-transform: lowercase; /* บังคับตัวพิมพ์เล็กตามที่คุณต้องการ */
-            letter-spacing: 4px; /* ระยะห่างระหว่างตัวอักษร */
-            text-align: center;
-            margin: 0;
-            /* เพิ่มเงาเรืองแสงสีขาวและสีน้ำเงินจางๆ (อิงจากสีโปรเจกต์เก่า) */
-            text-shadow: 
-                0 0 10px rgba(255, 255, 255, 0.8),
-                0 0 20px rgba(255, 255, 255, 0.4),
-                0 0 40px rgba(30, 60, 114, 0.5); 
-             animation: titleFadeIn 2s ease-out;
-        }
-
-        /* Animation ตอนเปิดหน้า */
-        @keyframes titleFadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* --- ส่วนสร้างดวงดาวด้วย CSS --- */
+        /* --- 🌌 Deep Space Theme --- */
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; overflow: hidden; background: #918686; }
         
-        /* ฟังก์ชันสร้างจุดดาวด้วย box-shadow (นี่คือเทคนิคการทำดาวโดยไม่ใช้รูปภาพ) */
-        /* เราจะสร้าง 3 เลเยอร์: เล็ก กลาง ใหญ่ เพื่อให้ดูมีมิติ */
-
-        /* Layer 1: ดาวเล็ก (เยอะสุด) */
-        .stars-small {
-            width: 1px; height: 1px; background: transparent;
-            position: absolute; top: 0; left: 0; z-index: 1;
-            box-shadow: 10vw 10vh #FFF, 20vw 80vh #FFF, 80vw 10vh #FFF, 90vw 50vh #FFF, 50vw 50vh #FFF,
-                        15vw 25vh #FFF, 35vw 75vh #FFF, 65vw 15vh #FFF, 85vw 85vh #FFF, 45vw 35vh #FFF,
-                        12vw 92vh #FFF, 72vw 22vh #FFF, 32vw 42vh #FFF, 52vw 62vh #FFF, 92vw 12vh #FFF,
-                        5vw 5vh #FFF, 95vw 95vh #FFF, 25vw 35vh #FFF, 75vw 65vh #FFF, 40vw 20vh #FFF,
-                        60vw 90vh #FFF, 30vw 10vh #FFF, 10vw 30vh #FFF, 80vw 40vh #FFF, 70vw 70vh #FFF,
-                        17vw 54vh #FFF, 39vw 88vh #FFF, 61vw 21vh #FFF, 83vw 47vh #FFF, 21vw 69vh #FFF,
-                        47vw 13vh #FFF, 58vw 34vh #FFF, 91vw 78vh #FFF, 13vw 43vh #FFF, 37vw 97vh #FFF;
-            opacity: 0.8;
-            animation: starTwinkle 5s infinite alternate;
+        /* Header Bar */
+        .header {
+            height: 60px;
+            background: rgba(10, 10, 15, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; align-items: center; 
+            padding: 0 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+            z-index: 1000; position: relative;
         }
 
-        /* Layer 2: ดาวกลาง */
-        .stars-medium {
-            width: 2px; height: 2px; background: transparent;
-            position: absolute; top: 0; left: 0; z-index: 2;
-            box-shadow: 25vw 15vh #FFF, 75vw 35vh #FFF, 15vw 65vh #FFF, 55vw 85vh #FFF, 85vw 20vh #FFF,
-                        30vw 50vh #FFF, 60vw 10vh #FFF, 10vw 90vh #FFF, 90vw 70vh #FFF, 40vw 40vh #FFF,
-                        22vw 78vh #FFF, 68vw 12vh #FFF, 48vw 52vh #FFF, 82vw 92vh #FFF, 12vw 22vh #FFF;
-            opacity: 0.6;
-            animation: starTwinkle 7s infinite alternate-reverse;
+        .brand { 
+            font-size: 1.2rem; font-weight: bold; color: white; letter-spacing: 1px; 
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+            margin-right: 30px;
+            white-space: nowrap;
         }
 
-        /* Layer 3: ดาวใหญ่ (น้อยสุด) */
-        .stars-large {
-            width: 3px; height: 3px; background: transparent;
-            position: absolute; top: 0; left: 0; z-index: 3;
-            box-shadow: 5vw 85vh #FFF, 95vw 15vh #FFF, 50vw 30vh #FFF, 20vw 60vh #FFF, 80vw 80vh #FFF;
-            opacity: 0.5;
-            border-radius: 50%; /* ทำให้ดาวใหญ่กลมขึ้น */
-             animation: starTwinkle 10s infinite alternate;
+        /* Menu Container */
+        .nav-menu { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+            flex-grow: 1; /* กินพื้นที่ที่เหลือทั้งหมด เพื่อดันส่วนท้ายไปขวา */
+        }
+        
+        /* ปุ่มเมนูทั่วไป */
+        .nav-item {
+            padding: 8px 20px; 
+            color: #aaa; 
+            text-decoration: none; 
+            border-radius: 4px;
+            font-size: 0.9rem; 
+            transition: 0.3s; 
+            cursor: pointer; 
+            border: 1px solid transparent;
+            background: rgba(255, 255, 255, 0.05);
+            letter-spacing: 0.5px;
+        }
+        .nav-item:hover { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: white; 
+            border-color: rgba(255,255,255,0.2); 
+        }
+        
+        /* Active State */
+        .nav-item.active { 
+            background: rgba(0, 210, 255, 0.15); 
+            color: #00d2ff; 
+            font-weight: bold; 
+            border-color: rgba(0, 210, 255, 0.3); 
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.1);
         }
 
-        /* Animation ให้ดาวกระพริบช้าๆ */
-        @keyframes starTwinkle {
-            from { opacity: 0.3; }
-            to { opacity: 1; }
+        /* ปุ่ม Admin Panel (Special Style) */
+        .admin-btn {
+            margin-left: auto; /* 🔥 สำคัญ: ดันตัวเองไปขวาสุดของ container */
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            color: #ff6b81;
+        }
+        .admin-btn:hover {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+            border-color: #ff4757;
+        }
+        .admin-btn.active {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+            box-shadow: 0 0 10px rgba(255, 71, 87, 0.2);
         }
 
-        /* Responsive: ปรับขนาดตัวอักษรเมื่ออยู่บนจอมือถือ */
-        @media (max-width: 768px) {
-            h1.main-title {
-                font-size: 2.5em;
-                letter-spacing: 2px;
-                padding: 0 20px;
-            }
+        /* User Profile */
+        .user-profile { 
+            display: flex; align-items: center; gap: 15px; color: white; font-size: 0.9rem; 
+            padding-left: 20px; border-left: 1px solid rgba(255,255,255,0.1); margin-left: 15px;
+        }
+        .logout-btn {
+            background: transparent; color: #aaa; border: 1px solid #444; padding: 5px 12px;
+            border-radius: 4px; cursor: pointer; font-size: 0.8rem; transition: 0.2s;
+        }
+        .logout-btn:hover { border-color: #ff4757; color: #ff4757; }
+
+        /* Iframe-------------------------------------------------------------------------------------------------- */
+        #mainFrame {
+            width: 100%; height: calc(100vh - 60px); border: none;
+            background: #b9afaf;
+            
         }
     </style>
 </head>
 <body>
 
-    <div class="stars-small"></div>
-    <div class="stars-medium"></div>
-    <div class="stars-large"></div>
+    <div class="header">
+        <div class="brand">HUB OS</div> <div class="nav-menu" id="dynamicMenu">
+            </div>
 
-    <div class="container">
-        <h1 class="main-title">web containers chain</h1>
+        <div class="user-profile">
+            <span id="displayUser">User</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
     </div>
 
+    <iframe id="mainFrame" src=""></iframe>
+
+    <script src="menu_config.js"></script>
+
+    <script>
+        // 🚀 MAIN LOGIC
+        const user = JSON.parse(sessionStorage.getItem('currentUser'));
+
+        // 1. Check Login
+        if (!user) {
+            window.location.href = 'index.html';
+        } else {
+            document.getElementById('displayUser').innerText = user.username;
+            
+            if (typeof appConfig !== 'undefined') {
+                renderMenu(appConfig.menus);
+            } else {
+                alert("Error: menu_config.js not found!");
+            }
+        }
+
+        // 2. Render Menu Function
+        function renderMenu(menus) {
+            const menuContainer = document.getElementById('dynamicMenu');
+            menuContainer.innerHTML = ''; 
+
+            let firstAllowedUrl = '';
+
+            // --- A. วนลูปสร้างเมนูทั่วไป (จาก Config) ---
+            menus.forEach(item => {
+                // ข้ามถ้าเป็น Admin Panel (เพราะเราจะสร้างแยกไว้ขวาสุด)
+                if (item.id === 'manage_users') return;
+
+                // เช็คสิทธิ์ (DB Permissions)
+                const isSuperAdmin = (user.role === 'superadmin');
+                const hasPermission = (user.permissions && user.permissions.includes(item.id));
+                
+                if (isSuperAdmin || hasPermission) {
+                    const btn = document.createElement('a');
+                    btn.className = 'nav-item';
+                    btn.innerText = item.name; // ✅ ใส่แค่ชื่อ ไม่เอา Icon
+                    btn.onclick = () => loadPage(item.url, btn);
+                    
+                    menuContainer.appendChild(btn);
+
+                    if (!firstAllowedUrl) firstAllowedUrl = item.url;
+                }
+            });
+
+            // --- B. สร้างปุ่ม Admin Panel (ถ้ามีสิทธิ์) ---
+            // เช็คว่าเป็น Admin หรือ Superadmin
+            if (user.role === 'admin' || user.role === 'superadmin') {
+                const adminBtn = document.createElement('a');
+                adminBtn.className = 'nav-item admin-btn'; // เพิ่ม class admin-btn เพื่อดันไปขวา
+                adminBtn.innerText = 'Admin Panel';
+                adminBtn.onclick = () => loadPage('admin-view.html', adminBtn); // ไฟล์ Admin ของคุณ
+                
+                menuContainer.appendChild(adminBtn);
+
+                // ถ้าไม่มีหน้าอื่นให้เข้าเลย ก็เปิด Admin เป็นหน้าแรก
+                if (!firstAllowedUrl) firstAllowedUrl = 'admin-view.html';
+            }
+
+            // --- C. เปิดหน้าแรกอัตโนมัติ ---
+            if (firstAllowedUrl) {
+                // หาปุ่มที่ตรงกับ url แรกเพื่อ set active
+                // (แบบง่ายๆ คือโหลดเลย แล้วค่อยไปไล่ set active ทีหลัง)
+                const allBtns = menuContainer.querySelectorAll('.nav-item');
+                if (allBtns.length > 0) {
+                    // ถ้าปุ่มแรกไม่ใช่ Admin ให้คลิกปุ่มแรก
+                    // ถ้ามีแต่ Admin ก็คลิก Admin
+                    if(allBtns[0].innerText !== 'Admin Panel' || allBtns.length === 1) {
+                         allBtns[0].click();
+                    } else {
+                        // กรณีที่ปุ่ม Admin อยู่ขวาสุด แต่อยากให้มัน Active ถ้าไม่มีอย่างอื่น
+                        loadPage(firstAllowedUrl, null); 
+                        // เนื่องจากเรา create element แบบ dynamic การหา element เพื่อ add class active อาจจะยาก
+                        // ให้ user กดเอง หรือ set default ไปก่อน
+                    }
+                }
+            } else {
+                document.getElementById('mainFrame').src = 'about:blank';
+            }
+        }
+
+        function loadPage(url, el) {
+            document.getElementById('mainFrame').src = url;
+            
+            // Toggle Active Class
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            if(el) el.classList.add('active');
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            fetch('/api/logout', { method: 'POST' }).catch(e => console.log(e));
+            window.location.href = 'index.html';
+        }
+    </script>
 </body>
 </html>

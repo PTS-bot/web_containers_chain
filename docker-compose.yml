@@ -1,4 +1,46 @@
 services:
+
+  gateway:
+    build: 
+      context: .
+      dockerfile: dockerfile.gateway  
+    container_name: web-gateway
+    volumes:
+    #   - ./web_porxy_nginx:/var/www/dashboard    
+      - ./web_porxy_nginx:/usr/share/nginx/html # 👈 Map ไฟล์ HTML
+      - ./web_porxy_nginx/nginx.conf:/etc/nginx/nginx.conf # 👈 Map Config Nginx
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service         
+
+  auth-service:
+    image: node:18-alpine  # ใช้ Image Node สำเร็จรูป ไม่ต้อง install เอง
+    container_name: auth-service
+    working_dir: /app
+    volumes:
+      # ✅ ใช้ Volume เดียวกับ Nginx เลย เพื่อให้อ่านไฟล์ users.json ตัวเดียวกันได้
+      - ./web_porxy_node:/app 
+    command: sh -c "npm install express body-parser cors express-session mongoose && node server.js"
+    ports:
+      - "3000:3000"
+    restart: always
+    depends_on:
+      - mongo # บอกให้รอ mongo รันก่อน (ระดับ network)
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./web_porxy_mongo:/data/db  # Map ข้อมูลออกมาข้างนอก กันข้อมูลหาย
+
+# ---------------------------------------------------------------------------------------------------------
+
+
+
   jupyter:
     build:
       context: ./
@@ -8,16 +50,6 @@ services:
       - "8888:8888"          
     volumes:
       - ./work_space:/home/master
-
-  gateway:
-    build: 
-      context: .
-      dockerfile: dockerfile.gateway  
-    container_name: web-gateway
-    volumes:
-      - ./web_porxy_nginx:/var/www/dashboard    
-    ports:
-      - "8080:8080"      
 
   pipelines:
       ports:
@@ -36,11 +68,16 @@ services:
       image: ghcr.io/open-webui/open-webui:main
       ports:
           - 8877:8080
-      # volumes:
-      #     - open-webui:/app/backend/data  # 
+      volumes:
+          - ./open-webui:/app/backend/data  # 
       environment:
           - OLLAMA_BASE_URL=http://ollama:11434      
-          # - WEBUI_URL=http://localhost:8080/open-webui  
+          # - WEBUI_URL=http://localhost:8080/open-webui
+          - OPENAI_API_BASE_URL=http://pipelines:9099
+          - ENABLE_CODE_EXECUTION=true  
+
+
+# -------------------------------------------------------------------------------------------------
 
   White_board:
     image: lovasoa/wbo:latest
@@ -61,33 +98,33 @@ services:
     volumes:
       - ./work_space/web_obsidian-config:/config  # เก็บไฟล์ Vault และ Config ไว้ที่นี่
     ports:
-      - 3000:3000  # เข้าผ่าน http://localhost:3000
-      - 3001:3001  # HTTPS
+      - 3400:3000  # เข้าผ่าน http://localhost:3000
+      - 3401:3001  # HTTPS
     # สองบรรทัดล่างนี้ สำคัญมากสำหรับ Obsidian (เพราะมันเป็น Electron App)
     security_opt:
       - seccomp:unconfined 
     shm_size: "1gb"
     restart: unless-stopped
 
-  webtop:
-    image: lscr.io/linuxserver/webtop:ubuntu-xfce
-    container_name: webtop
-    security_opt:
-      - seccomp:unconfined # จำเป็นเพื่อให้บางโปรแกรมทำงานได้สมบูรณ์
-    environment:
-      - PUID=1000 # User ID
-      - PGID=1000 # Group ID
-      - TZ=Asia/Bangkok # ตั้งเวลาเป็นไทย
-      - SUBFOLDER=/ # (Optional) ถ้าใช้ Reverse Proxy
-      # - KEYBOARD=en-us-qwerty # (Optional) ตั้งค่าคีย์บอร์ด
-    volumes:
-      - ./work_space/web_desktop:/config # เก็บข้อมูล Home Directory ไว้ที่นี่เพื่อไม่ให้ข้อมูลหาย
-      # - /var/run/docker.sock:/var/run/docker.sock # (Optional) เปิดบรรทัดนี้ถ้าอยากรัน Docker ซ้อนข้างใน
-    ports:
-      - 3100:3000 # พอร์ตสำหรับเข้าผ่าน HTTP
-      - 3101:3001 # พอร์ตสำหรับเข้าผ่าน HTTPS
-    shm_size: "1gb" # สำคัญมาก! ต้องตั้งค่านี้ไม่งั้น Browser ใน Webtop จะแครชบ่อย
-    restart: unless-stopped
+#   webtop:
+#     image: lscr.io/linuxserver/webtop:ubuntu-xfce
+#     container_name: webtop
+#     security_opt:
+#       - seccomp:unconfined # จำเป็นเพื่อให้บางโปรแกรมทำงานได้สมบูรณ์
+#     environment:
+#       - PUID=1000 # User ID
+#       - PGID=1000 # Group ID
+#       - TZ=Asia/Bangkok # ตั้งเวลาเป็นไทย
+#       - SUBFOLDER=/ # (Optional) ถ้าใช้ Reverse Proxy
+#       # - KEYBOARD=en-us-qwerty # (Optional) ตั้งค่าคีย์บอร์ด
+#     volumes:
+#       - ./work_space/web_desktop:/config # เก็บข้อมูล Home Directory ไว้ที่นี่เพื่อไม่ให้ข้อมูลหาย
+#       # - /var/run/docker.sock:/var/run/docker.sock # (Optional) เปิดบรรทัดนี้ถ้าอยากรัน Docker ซ้อนข้างใน
+#     ports:
+#       - 3100:3000 # พอร์ตสำหรับเข้าผ่าน HTTP
+#       - 3101:3001 # พอร์ตสำหรับเข้าผ่าน HTTPS
+#     shm_size: "1gb" # สำคัญมาก! ต้องตั้งค่านี้ไม่งั้น Browser ใน Webtop จะแครชบ่อย
+#     restart: unless-stopped
  
 
 volumes:
