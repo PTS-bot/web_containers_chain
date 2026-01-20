@@ -51,6 +51,17 @@ services:
     volumes:
       - ./work_space:/home/master
 
+  jupyter2:
+    build:
+      context: ./
+      dockerfile: dockerfile.jupyter
+    container_name: jupyter2
+    ports:
+      - "8889:8888"
+    command: start-notebook.sh --ServerApp.base_url='/jupyter2/' --ServerApp.token='' --ServerApp.password=''            
+    volumes:
+      - ./work_space2:/home/master      
+
   pipelines:
       ports:
           - 9099:9099

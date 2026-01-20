@@ -8,7 +8,7 @@ const appConfig = {
         // },
         {
             id: "white_board",
-            name: "White_board",
+            name: "White board",
             icon: "fas fa-pen-nib",
             // url: "/White_board/",
             url: "http://localhost:5001",
@@ -31,14 +31,21 @@ const appConfig = {
 
         {
             id: "jupyter",
-            name: "Jupyter",
+            name: "Jupyter I",
             icon: "fas fa-code",
             url: "/jupyter/",
             // url: "http://jupyter:8888/jupyter/lab",
             // url: "http://localhost:8888/jupyter/lab",
             active: false
         },
-
+        {
+            id: "jupyter2",
+            name: "Jupyter II",
+            icon: "fas fa-code",
+            url: "/jupyter2/",
+            // url: "http://jupyter2:8888/jupyter/lab",
+            active: false
+        },
         {
             id: "ai_llm",
             name: "AI(LLM)",
