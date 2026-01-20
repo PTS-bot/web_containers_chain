@@ -1,6 +1,7 @@
 # ไม่เอาโฟลเดอร์ data ของ open-webui
-open-webui/
-web_porxy_mongo/
-work_space/web_obsidian-config/
-# แถม: ปกติเรามักจะ ignore ไฟล์ .env ด้วยเพราะเก็บความลับ
-.env
+    open-webui/
+    web_proxy_mongo/
+    web_proxy_node/node_modules/
+    work_space/web_obsidian-config/
+
+    .env
