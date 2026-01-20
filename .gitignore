@@ -1,4 +1,5 @@
 # ไม่เอาโฟลเดอร์ data 
+    test/
     open-webui/
     web_proxy_mongo/
     web_proxy_node/node_modules/
