@@ -1,7 +1,7 @@
 # ไม่เอาโฟลเดอร์ data 
-    test/package-lock.json
-    open-webui/
-    web_proxy_mongo/
-    web_proxy_node/node_modules/
-    work_space/web_obsidian-config/
+
+open-webui/
+web_proxy_mongo/
+web_proxy_node/node_modules/
+work_space/web_obsidian-config/
 /test
