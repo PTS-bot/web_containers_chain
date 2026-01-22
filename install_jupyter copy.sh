@@ -2,23 +2,34 @@
 set -e
 
 # ==========================================
-# 1. ส่วนกำหนดตัวแปร
+# 1. ส่วนกำหนดตัวแปร (Configuration Variables)
 # ==========================================
-JUP_TOKEN="${JUPYTER_TOKEN:-master}"
-WORK_DIR="${JUPYTER_WORKDIR:-/home/master}"
-REQ_FILE="requirements_python.txt"
+JUP_TOKEN="${JUPYTER_TOKEN:-master}"       
+WORK_DIR="${JUPYTER_WORKDIR:-/home/master}" 
+REQ_FILE="requirements_python.txt"          
 
 echo "========================================"
-echo "Starting Installation..."
+echo "Starting Installation with configs:"
+echo " - Token/Password : $JUP_TOKEN"
+echo " - Working Dir    : $WORK_DIR"
 echo "========================================"
 
 # ==========================================
-# 2. ส่วนติดตั้ง
+# 2. ส่วนติดตั้ง (Installation)
 # ==========================================
 apt-get update
+
+# 🔥 เพิ่ม iputils-ping (สำหรับ ping) และ net-tools (เผื่อใช้ ifconfig) ตรงนี้ครับ
 apt-get install -y \
-    python3 python3-pip python3-dev build-essential openjdk-11-jdk \
-    git curl iputils-ping net-tools
+    python3 \
+    python3-pip \
+    python3-dev \
+    build-essential \
+    openjdk-11-jdk \
+    git \
+    curl \
+    iputils-ping \
+    net-tools
 
 apt-get clean
 rm -rf /var/lib/apt/lists/*
@@ -40,10 +51,7 @@ mkdir -p "$WORK_DIR"
 
 echo "Generating Jupyter Config at $CONFIG_FILE..."
 
-# ✅ เขียนทุกอย่างลงไฟล์ทีเดียวเลยครับ
 cat <<EOT > "$CONFIG_FILE"
-import os
-
 c.ServerApp.ip = '0.0.0.0'
 c.ServerApp.port = 8888
 c.ServerApp.open_browser = False
@@ -54,10 +62,17 @@ c.ServerApp.disable_check_xsrf = True
 c.ServerApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors 'self' *"}}
 c.ServerApp.token = '$JUP_TOKEN'
 c.ServerApp.root_dir = '$WORK_DIR'
-
-# 🔥 Dynamic Base URL Logic
-# อ่านค่าจาก Env 'JUPYTER_BASE_URL' ถ้าไม่มีให้ใช้ '/jupyter' เป็นค่า default
-c.ServerApp.base_url = os.environ.get('JUPYTER_BASE_URL', '/jupyter')
 EOT
 
+
+echo "c.ServerApp.base_url = '/jupyter'" >> "$CONFIG_FILE"
+echo "c.ServerApp.allow_origin = '*'" >> $CONFIG_FILE
+
+echo "c.ServerApp.allow_remote_access = True" >> $CONFIG_FILE
+
+echo "c.ServerApp.tornado_settings = {'headers': {'Content-Security-Policy': \"frame-ancestors 'self' *\"}}" >> $CONFIG_FILE
+
+# ปิด XSRF check เพื่อให้ iframe ทำงานได้ลื่นขึ้น
+
+echo "c.ServerApp.disable_check_xsrf = True" >> $CONFIG_FILE
 echo "=== Installation Complete ==="

@@ -47,7 +47,11 @@ services:
       dockerfile: dockerfile.jupyter
     container_name: jupyter
     ports:
-      - "8888:8888"          
+      - "8888:8888"
+    environment:
+      - JUPYTER_BASE_URL=/jupyter 
+      - JUP_TOKEN=master
+    command: jupyter lab --allow-root                      
     volumes:
       - ./work_space:/home/master
 
@@ -58,7 +62,11 @@ services:
     container_name: jupyter2
     ports:
       - "8889:8888"
-    command: start-notebook.sh --ServerApp.base_url='/jupyter2/' --ServerApp.token='' --ServerApp.password=''            
+    environment:
+      - JUPYTER_BASE_URL=/jupyter2 
+      - JUP_TOKEN=master
+    # ⚠️ สำคัญ: ใช้ command นี้แทน start-notebook.sh (เพราะใน script คุณไม่มีไฟล์นั้น)
+    command: jupyter lab --allow-root           
     volumes:
       - ./work_space2:/home/master      
 
